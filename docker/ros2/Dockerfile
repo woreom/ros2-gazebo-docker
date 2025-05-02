@@ -12,7 +12,10 @@ ENV DEBIAN_FRONTEND=noninteractive
 
 # Install packages.
 RUN apt-get update && apt-get install -y \
+    sudo \
     ros-${ROS_DISTRO}-gazebo-* \
+    ros-${ROS_DISTRO}-ros2-* \
+    ros-galactic-twist-mux \
     python-is-python3 \
     nano \
     less \
@@ -22,8 +25,13 @@ RUN apt-get update && apt-get install -y \
     ros-${ROS_DISTRO}-slam-* 
 #    && rm -rf /var/lib/apt/lists/*
 
-# Switch to a non-root user.
-RUN useradd -m --uid ${user_id} dockeruser
+# Set root password
+RUN echo 'root:1' | chpasswd
+
+# Switch to a non-root user and add to sudo group.
+RUN useradd -m --uid ${user_id} dockeruser \
+    && echo 'dockeruser:1' | chpasswd \
+    && adduser dockeruser sudo
 USER dockeruser
 
 # Working directory

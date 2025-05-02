@@ -132,6 +132,21 @@
     *(You can add this line to `~/.bashrc` inside the container if you always want it sourced)*
 6.  Run your custom nodes: `ros2 run your_package_name your_node_name`
 
+### Example ros2 Controller
+*   For understanding `ros2_control` concepts, see this tutorial: [ROS 2 Control Concepts](https://articulatedrobotics.xyz/tutorials/mobile-robot/applications/ros2_control-concepts/)
+```
+cd ~/dev_ws/src/
+git clone https://github.com/joshnewans/articubot_one.git
+cd ../
+colcon build --symlink-install
+source install/setup.bash
+# launch gazbo
+ros2 launch articubot_one launch_sim.launch.py world:=./src/articubot_one/worlds/obstacles.world
+# on another terminal launch keyboard
+ros2 run teleop_twist_keyboard teleop_twist_keyboard --ros-args -r /cmd_vel:=/diff_cont/cmd_vel_unstamped
+```
+
+
 ## Managing the Container
 
 *   **Stop the container:**
